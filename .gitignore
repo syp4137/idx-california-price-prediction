@@ -1,0 +1,22 @@
+# Raw and processed data
+data/raw/
+data/processed/
+data/*.csv
+data/**/*.csv
+
+# Model files
+models/*.pkl
+models/*.joblib
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Environment
+.env
+.venv/
+venv/
+
+# Mac
+.DS_Store
