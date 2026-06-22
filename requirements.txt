@@ -1,0 +1,34 @@
+# Core data analysis
+numpy
+pandas
+scipy
+
+# Visualization and exploration
+matplotlib
+seaborn
+plotly
+
+# Modeling
+scikit-learn
+xgboost
+lightgbm
+statsmodels
+shap
+joblib
+
+# Notebook environment
+jupyter
+ipykernel
+notebook
+streamlit
+
+# Data and document utilities
+pyarrow
+openpyxl
+pypdf
+python-dotenv
+
+# Geospatial helpers for location-based housing features
+geopandas
+geopy
+folium
