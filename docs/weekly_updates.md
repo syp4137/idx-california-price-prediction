@@ -69,3 +69,45 @@
 * Review and handle extreme values
 * Create a time-based train/test split using the latest month as the test period
 * Prepare the first baseline model
+
+
+## Week 3 — Data Preprocessing
+
+This week, I continued from `01_exploration.ipynb` and worked on `02_preprocessing.ipynb`.
+
+### Completed
+
+- Created a cleaned base dataset for modeling.
+- Kept the project filter:
+  - `PropertyType = Residential`
+  - `PropertySubType = SingleFamilyResidence`
+- Removed rows with missing or invalid `ClosePrice` and `CloseDate`.
+- Handled duplicated `ListingKey` values by treating them as repeated or updated copies of the same listing record.
+- Cleaned numeric, boolean, and location-related fields.
+- Added missing/invalid flags where useful.
+- Created a time-based train/test split plan:
+  - most recent close month = test set
+  - previous X months = training set
+  - X is treated as a tunable training window length
+- Saved cleaned split files for each candidate X-month training window.
+- Added a preprocessing pipeline template for future modeling.
+
+### Key Decision
+
+To avoid data leakage, I did not fit imputation, scaling, rare-category grouping, or one-hot encoding on the full dataset.
+
+Instead, the cleaned CSV is saved before those steps. In the modeling notebook, preprocessing will be fit on the training set only and then applied to the test set.
+
+### Outputs
+
+- `02_preprocessing.ipynb`
+- cleaned base CSV
+- split plan CSV
+- cleaned train/test split files
+
+### Next Steps
+
+- Start the baseline modeling notebook.
+- Train a Linear Regression model.
+- Compare test R² across different training window lengths.
+- Select the best X-month training window based on model performance.
