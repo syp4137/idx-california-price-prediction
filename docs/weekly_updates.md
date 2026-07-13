@@ -111,3 +111,28 @@ Instead, the cleaned CSV is saved before those steps. In the modeling notebook, 
 - Train a Linear Regression model.
 - Compare test R² across different training window lengths.
 - Select the best X-month training window based on model performance.
+
+
+## Week 4 — Baseline Model
+
+- Built a Linear Regression baseline model for predicting `ClosePrice`.
+- Used the agreed recent six-month block: five months for training and the following month for evaluation.
+- Added older data only for a rolling-origin stability check.
+- Used 40 raw features, including property characteristics, location variables, boolean fields, and missing-value flags.
+- Excluded leakage-related fields such as `ListPrice`, `OriginalListPrice`, `DaysOnMarket`, and post-close information.
+- Built a train-only preprocessing pipeline:
+  - median imputation and standardization for numeric features
+  - missing-category imputation and one-hot encoding for categorical features
+  - most-frequent imputation for boolean features
+  - zero imputation for missing-value flags
+- Calculated the 0.5th and 99.5th percentile `ClosePrice` bounds from each training set only and applied the same bounds to its evaluation set.
+- Ran the same pipeline across five historical cutoffs. The rolling-origin results were stable, with a mean R² of 0.8202 and a standard deviation of 0.0062.
+- Trained the final model on December 2025 through April 2026 and evaluated it on May 2026.
+- Final test results:
+  - R²: 0.8323
+  - MAE: about $247K
+  - RMSE: about $414K
+  - MAPE: 23.04%
+  - MdAPE: 16.05%
+- Saved the final preprocessing pipeline, model, predictions, and evaluation results.
+- My R² was noticeably higher than the other team results, so I plan to compare our feature sets, outlier handling, and test samples to understand the difference.
