@@ -136,3 +136,16 @@ Instead, the cleaned CSV is saved before those steps. In the modeling notebook, 
   - MdAPE: 16.05%
 - Saved the final preprocessing pipeline, model, predictions, and evaluation results.
 - My R² was noticeably higher than the other team results, so I plan to compare our feature sets, outlier handling, and test samples to understand the difference.
+
+
+## Week 5 — Additional Models
+
+- I updated part of the preprocessing based on feedback from last week, so the Linear Regression baseline changed slightly.
+- I trained Decision Tree and Random Forest models using the same cleaned data, 40-feature set, 6-month training window, and final test month as the baseline.
+- The default Decision Tree clearly overfit. Its train R² was almost 1.00, while its test R² was 0.7243.
+- Random Forest performed the best overall. Its test R² was 0.8575, compared with 0.8361 for Linear Regression.
+- Random Forest also reduced MAE from about $242K to $180K and MdAPE from 15.99% to 8.33%.
+- The most important Random Forest features were LivingArea, BathroomsTotalInteger, Latitude, and Longitude.
+- I also added rolling-origin checks using the same historical cutoffs to look at model stability over time.
+- Hyperparameter tuning is included as an optional section, but I kept it disabled because Random Forest tuning was expensive on the expanded dataset.
+- Overall, Random Forest looks promising. I expect feature engineering and additional models to improve the results further.
