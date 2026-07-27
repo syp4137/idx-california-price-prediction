@@ -149,3 +149,54 @@ Instead, the cleaned CSV is saved before those steps. In the modeling notebook, 
 - I also added rolling-origin checks using the same historical cutoffs to look at model stability over time.
 - Hyperparameter tuning is included as an optional section, but I kept it disabled because Random Forest tuning was expensive on the expanded dataset.
 - Overall, Random Forest looks promising. I expect feature engineering and additional models to improve the results further.
+
+## Week 6 — Feature Engineering
+
+- Added `UnifiedSchoolDistrict` by spatially joining property coordinates with the California 2025–26 school district boundaries.
+  - About 75% of records with valid coordinates matched a Unified district.
+  - Unmatched records were kept as missing because some areas use separate elementary and high school districts.
+
+- Created new structural features:
+  - `PropertyAgeYears`
+  - `BedBathRatio`
+  - `LivingAreaPerBedroom`
+  - `LogLotToLivingAreaRatio`
+  - `HasGarage`
+
+- Replaced `YearBuilt` with `PropertyAgeYears` in the structural feature set.
+- Log-transformed the lot-to-living-area ratio because its distribution was highly right-skewed.
+
+- Compared four feature sets:
+  1. Base
+  2. Structural Derived
+  3. Unified School District
+  4. Structural Derived + Unified School District
+
+- Held model settings fixed across feature sets so that the comparison focused on the effect of feature engineering.
+
+- Used May 2026 as the validation month to select a new feature set for each model.
+- Retrained the models using data from December 2025 through May 2026 and evaluated the selected feature sets on the June 2026 test set.
+
+### Results
+
+- **Linear Regression**
+  - Structural features performed best.
+  - Test R² improved from `0.8361` to `0.8410`.
+  - MAE decreased from `$242.3K` to `$232.6K`.
+  - MdAPE decreased from `15.99%` to `15.05%`.
+
+- **Decision Tree**
+  - The school district feature improved validation performance but did not generalize as well to the final test month.
+  - Test R² decreased from `0.7243` to `0.7185`.
+
+- **Random Forest**
+  - The school district feature performed best.
+  - Test R² improved from `0.8575` to `0.8609`.
+  - MAE and MdAPE also showed small improvements.
+
+### Summary
+
+- The effect of feature engineering differed by model.
+- Structural features were most useful for Linear Regression.
+- The school district layer provided a small improvement for Random Forest.
+- Random Forest remained the strongest model overall, with a test R² of `0.8609` and MdAPE of `8.31%`.
