@@ -20,3 +20,6 @@ venv/
 
 # Mac
 .DS_Store
+
+# output
+output/
