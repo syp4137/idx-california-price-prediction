@@ -76,20 +76,20 @@ Feature engineering added:
 
 ## Models Tested
 
-The project tested the following model families:
+The project tested four main model families:
 
 - Linear Regression baseline
 - Decision Tree Regressor
 - Random Forest Regressor
 - XGBoost Regressor
-- Streamlit demo model using HistGradientBoosting with a simplified four-feature input
+
+Additional XGBoost experiments tested leakage-safe local price aggregate features and raw/log1p prediction blending. The Streamlit app uses a separate HistGradientBoosting demo model with a simplified four-feature input.
 
 Primary notebooks:
 
 ```text
 notebooks/03_baseline_model.ipynb
 notebooks/04_model_comparison.ipynb
-notebooks/04-1_location_ablation_experiment.ipynb
 notebooks/05_advanced_models.ipynb
 notebooks/06-1_additional_experiment.ipynb
 notebooks/06_evaluation.ipynb
@@ -98,28 +98,45 @@ notebooks/09_streamlit_demo_model.ipynb
 
 ## Best Results
 
-The best full project model is the tuned XGBoost model with log-transformed target and the `Base + Structural Derived + UnifiedSchoolDistrict` feature set.
+The best final project result is `Final: local + 60/40 blend`: a tuned XGBoost setup with leakage-safe local price aggregate features and a blended prediction using 60% log1p-target prediction plus 40% raw-target prediction.
 
 Final test setup:
 
 - Training window: June 2025 through May 2026
 - Test month: June 2026
 - Test rows after filtering: 12,538
-- Raw feature count: 54
+- Raw feature count: 56
 
 Final test results:
 
-| Model | Feature Set | Target | Test R2 | MAE | RMSE | MdAPE |
+| Model | Feature Set | Target / Prediction | Test R2 | MAE | RMSE | MdAPE |
 | --- | --- | --- | ---: | ---: | ---: | ---: |
+| Final XGBoost Blend | Base + Structural Derived + UnifiedSchoolDistrict + local price features | 60% log1p + 40% raw blend | 0.916 | $141,558 | $277,507 | 7.27% |
 | XGBoost tuned | Base + Structural Derived + UnifiedSchoolDistrict | log1p | 0.909 | $148,075 | $289,276 | 7.65% |
 | Random Forest | Base + UnifiedSchoolDistrict | raw | 0.890 | $157,781 | $317,251 | 7.60% |
 | Linear Regression | Base + Structural Derived + UnifiedSchoolDistrict | raw | 0.855 | $215,528 | $364,204 | 14.34% |
 | Decision Tree | Base + UnifiedSchoolDistrict | raw | 0.764 | $226,461 | $464,916 | 10.84% |
 
-The final XGBoost model is saved at:
+The final blended model artifact is saved at:
+
+```text
+models/final/final_local_60_40_blend_artifact.joblib
+```
+
+The artifact can be loaded with `joblib.load(...)` and used through `artifact.predict(input_df)`. It stores both fitted XGBoost pipelines, the local aggregate feature transformer, blend weights, feature lists, metadata, and validation metrics.
+
+The Week 7 tuned XGBoost pipeline is also saved at:
 
 ```text
 models/week7_advanced_models/xgboost_tuned_pipeline.joblib
+```
+
+The final local + 60/40 blend result is documented in:
+
+```text
+outputs/final_blend_artifact/final_blend_artifact_metrics.csv
+outputs/log_size_feature_experiment/local_price_feature_blending_experiment_results.csv
+outputs/log_size_feature_experiment/local_price_feature_blending_experiment_decision_summary.csv
 ```
 
 The simplified Streamlit demo model is intentionally less accurate because it only uses `LivingArea`, `BedroomsTotal`, `BathroomsTotalInteger`, and `LotSizeSquareFeet`.
@@ -146,6 +163,8 @@ idx-california-price-prediction/
 |-- models/
 |-- notebooks/
 |-- outputs/
+|-- scripts/
+|-- src/
 |-- requirements.txt
 `-- README.md
 ```
@@ -176,14 +195,14 @@ To reproduce the final project results, run:
 3. 03_baseline_model.ipynb
 4. 04_model_comparison.ipynb
 5. 05_advanced_models.ipynb
-6. 06_evaluation.ipynb
-7. 09_streamlit_demo_model.ipynb
+6. 06-1_additional_experiment.ipynb
+7. 06_evaluation.ipynb
+8. 09_streamlit_demo_model.ipynb
 
 Optional exploratory experiments:
 - 03-1_x_window_preprocessing_202606.ipynb
 - 03-2_x_window_baseline_experiment_202606.ipynb
 - 04-1_location_ablation_experiment.ipynb
-- 06-1_additional_experiment.ipynb
 
 Start Jupyter with:
 
@@ -198,11 +217,28 @@ models/
 outputs/
 ```
 
+To regenerate the standalone final blend model artifact:
+
+```bash
+python scripts/train_final_blend_model.py
+```
+
+This writes:
+
+```text
+models/final/final_local_60_40_blend_artifact.joblib
+outputs/final_blend_artifact/final_blend_artifact_metrics.csv
+```
+
 Important output files:
 
 ```text
+models/final/final_local_60_40_blend_artifact.joblib
+outputs/final_blend_artifact/final_blend_artifact_metrics.csv
 outputs/week7_advanced_models/xgboost_final_test_results.csv
 outputs/week7_advanced_models/xgboost_model_comparison.csv
+outputs/log_size_feature_experiment/local_price_feature_blending_experiment_results.csv
+outputs/log_size_feature_experiment/local_price_feature_blending_experiment_decision_summary.csv
 outputs/week8_evaluation/metrics_summary.csv
 outputs/week9_streamlit/streamlit_demo_model_metrics.csv
 ```
