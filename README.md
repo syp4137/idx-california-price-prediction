@@ -170,19 +170,20 @@ python3 -m ipykernel install --user --name idx-price-prediction --display-name "
 
 ## Re-run the Code
 
-To reproduce the workflow, run the notebooks in this order:
+To reproduce the final project results, run:
+1. 01_exploration.ipynb
+2. 02_preprocessing.ipynb
+3. 03_baseline_model.ipynb
+4. 04_model_comparison.ipynb
+5. 05_advanced_models.ipynb
+6. 06_evaluation.ipynb
+7. 09_streamlit_demo_model.ipynb
 
-1. `notebooks/01_exploration.ipynb`
-2. `notebooks/02_preprocessing.ipynb`
-3. `notebooks/03-1_x_window_preprocessing_202606.ipynb`
-4. `notebooks/03-2_x_window_baseline_experiment_202606.ipynb`
-5. `notebooks/03_baseline_model.ipynb`
-6. `notebooks/04_model_comparison.ipynb`
-7. `notebooks/04-1_location_ablation_experiment.ipynb`
-8. `notebooks/05_advanced_models.ipynb`
-9. `notebooks/06-1_additional_experiment.ipynb`
-10. `notebooks/06_evaluation.ipynb`
-11. `notebooks/09_streamlit_demo_model.ipynb`
+Optional exploratory experiments:
+- 03-1_x_window_preprocessing_202606.ipynb
+- 03-2_x_window_baseline_experiment_202606.ipynb
+- 04-1_location_ablation_experiment.ipynb
+- 06-1_additional_experiment.ipynb
 
 Start Jupyter with:
 
